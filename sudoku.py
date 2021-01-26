@@ -1,5 +1,9 @@
 import numpy
-grid = [
+import tkinter
+
+
+root = tkinter.Tk()
+puzzle = [
         [3, 0, 6, 5, 0, 8, 4, 0, 0], 
         [5, 2, 0, 0, 0, 0, 0, 0, 0], 
         [0, 8, 7, 0, 0, 0, 0, 3, 1], 
@@ -11,36 +15,42 @@ grid = [
         [0, 0, 5, 2, 0, 6, 3, 0, 0]
     ]
 def possible(x,y,n):
-    global grid
+    global puzzle
     for i in range(0,9):
-        if grid[x][i]==n:
+        if puzzle[x][i]==n:
             return False
     for i in range(0,9):
-        if grid[i][y]==n:
+        if puzzle[i][y]==n:
             return False
     x0 = (x//3)*3
     y0 = (y//3)*3
     for i in range(0,3):
         for j in range(0,3):
-            if grid[x0+i][y0+j]==n:
+            if puzzle[x0+i][y0+j]==n:
                 return False
     return True
 
 def solve():
+    global puzzle
     for i in range(9):
         for j in range(9):
-            if grid[i][j]==0:
+            if puzzle[i][j]==0:
                 for temp in range(1,10):
                     if possible(i,j,temp):
-                        grid[i][j] = temp
+                        puzzle[i][j] = temp
                         solve()
-                        grid[i][j]=0
+                        puzzle[i][j]=0
                 return
-    print(numpy.matrix(grid))
+    print(numpy.matrix(puzzle))
     input("More?")
 
 def main():
-    return
+    global puzzle
+    for i in range(9):
+        for j in range(9):
+            mylabel = tkinter.Label(root,text=""+str(puzzle[i][j]))
+            mylabel.grid(row=i,column=j)
 
 if __name__ == '__main__':
-    solve()
+    main()
+    root.mainloop()
